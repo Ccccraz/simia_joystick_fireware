@@ -4,7 +4,7 @@
 
 #include <cstring>
 
-#include "joystick_serial.h"
+#include "joystick.h"
 
 constexpr int num_leds{1};
 constexpr int led_pin{21};
@@ -18,9 +18,9 @@ struct DataFrame {
 
 USBCDC USBSerial{};
 
-Stick define{.left = 1, .right = 2, .up = 3, .down = 4};
+simia::Stick define{.left = 1, .right = 2, .up = 3, .down = 4};
 
-Joystick joystick{define};
+simia::Joystick joystick{define};
 
 void setup() {
   FastLED.addLeds<NEOPIXEL, led_pin>(leds, num_leds);
@@ -32,7 +32,7 @@ void setup() {
 
 void loop() {
   auto result{joystick.read()};
-  if (result != DIRECTION::CENTER) {
+  if (result != simia::DIRECTION::CENTER) {
     leds[0] = CRGB::White;
     FastLED.show();
     DataFrame data_frame{};
