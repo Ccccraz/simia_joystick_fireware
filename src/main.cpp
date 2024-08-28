@@ -1,48 +1,38 @@
 #include <Arduino.h>
-#include <FastLED.h>
 #include <USB.h>
 
-#include <cstring>
-
+#include "config.h"
 #include "joystick.h"
 
-constexpr int num_leds{1};
-constexpr int led_pin{21};
-CRGB leds[num_leds];
+simia::Stick define{.left = LeftPin, .right = RightPin, .up = UpPin, .down = DownPin};
 
-struct DataFrame {
-  byte header1{0xAB};
-  byte header2{0xCD};
-  byte data;
-};
+#if Mode == 0
+#include "Joystick_keyboard.h"
+simia::JoystickKeyboard joystick{define};
 
-USBCDC USBSerial{};
+#elif Mode == 1
+#include "Joystick_keyboard.h"
 
-simia::Stick define{.left = 1, .right = 2, .up = 3, .down = 4};
+simia::KeyboardDefine keyboard_define{.left = HID_KEY_A, .right = HID_KEY_D, .up = HID_KEY_W, .down = HID_KEY_S};
+simia::JoystickKeyboard joystick{define, keyboard_define};
 
-simia::Joystick joystick{define};
+#elif Mode == 2
+#include "Joystick_gamepad.h"
 
-void setup() {
-  FastLED.addLeds<NEOPIXEL, led_pin>(leds, num_leds);
-  Serial.begin(9600);
+simia::JoystickGamepad joystick{define};
 
-  USB.begin();
-  USBSerial.begin();
+#elif Mode == 3
+#include "Joystick_stick.h"
+
+simia::JoystickStick joystick{define};
+#endif // Mode
+
+void setup()
+{
+    USB.begin();
+    joystick.start();
 }
 
-void loop() {
-  auto result{joystick.read()};
-  if (result != simia::DIRECTION::CENTER) {
-    leds[0] = CRGB::White;
-    FastLED.show();
-    DataFrame data_frame{};
-    byte buf[sizeof(data_frame)]{};
-    data_frame.data = result;
-    std::memcpy(buf, &data_frame, sizeof(data_frame));
-    USBSerial.write(buf, sizeof(buf));
-    leds[0] = CRGB::Black;
-    FastLED.show();
-  }
-
-  delay(10);
+void loop()
+{
 }
