@@ -3,7 +3,7 @@
 // 2: Gamepad(PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT)
 // 3: Joystick
 // TODO: 4: Joystick(serial)
-#define Mode 0 
+#define Mode 2
 
 // define the pin of the joystick
 #define LeftPin 1
