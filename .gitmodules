@@ -1,6 +1,6 @@
-[submodule "lib/simia_joystick"]
-	path = lib/simia_joystick
-	url = https://github.com/Ccccraz/simia_joystick.git
 [submodule "boards"]
 	path = boards
 	url = https://github.com/Ccccraz/boards.git
+[submodule "lib/simia_joystick_lib"]
+	path = lib/simia_joystick_lib
+	url = https://github.com/Ccccraz/simia_joystick_lib.git
